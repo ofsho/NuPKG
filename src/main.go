@@ -9,7 +9,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/charmbracelet/bubbles/list"
@@ -18,12 +17,13 @@ import (
 )
 
 func main() {
-	//#region http
+	/*region http
 	p := tea.NewProgram(model{})
 	if err := p.Start(); err != nil {
 		log.Fatal(err)
 	}
-	//#endregion
+	#endregion*/
+
 	//#region picker
 	var (
 		helpStyle = list.DefaultStyles().HelpStyle.PaddingLeft(4).PaddingBottom(1)
