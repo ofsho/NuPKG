@@ -9,12 +9,70 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/progress"
+	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 )
+
+//#region textinput
+type model_4 struct {
+	textInput textinput.Model
+	err       error
+}
+
+func initialModel() model_4 {
+	ti := textinput.New()
+	ti.Placeholder = "Username / Password"
+	ti.Focus()
+	ti.CharLimit = 156
+	ti.Width = 20
+
+	return model_4{
+		textInput: ti,
+		err:       nil,
+	}
+}
+
+type tickMsg2 struct{}
+type errMsg2 error
+
+func (m model_4) Init() tea.Cmd {
+	return textinput.Blink
+}
+
+func (m model_4) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	var cmd tea.Cmd
+
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		switch msg.Type {
+		case tea.KeyEnter, tea.KeyCtrlC, tea.KeyEsc:
+			return m, tea.Quit
+		}
+
+	// We handle errors just like any other message
+	case errMsg2:
+		m.err = msg
+		return m, nil
+	}
+
+	m.textInput, cmd = m.textInput.Update(msg)
+	return m, cmd
+}
+
+func (m model_4) View() string {
+	return fmt.Sprintf(
+		"Log In \n\n%s\n\n%s",
+		m.textInput.View(),
+		"(esc to quit)",
+	) + "\n"
+}
+
+//#endregion
 
 func main() {
 	/*region http
@@ -23,6 +81,14 @@ func main() {
 		log.Fatal(err)
 	}
 	#endregion*/
+
+	//#region check command
+	p := tea.NewProgram(initialModel())
+
+	if err := p.Start(); err != nil {
+		log.Fatal(err)
+	}
+	//#endregion
 
 	//#region picker
 	var (
