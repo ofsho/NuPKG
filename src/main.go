@@ -9,6 +9,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/charmbracelet/bubbles/list"
@@ -17,6 +18,13 @@ import (
 )
 
 func main() {
+	//#region http
+	p := tea.NewProgram(model{})
+	if err := p.Start(); err != nil {
+		log.Fatal(err)
+	}
+	//#endregion
+	//#region picker
 	var (
 		helpStyle = list.DefaultStyles().HelpStyle.PaddingLeft(4).PaddingBottom(1)
 	)
@@ -49,7 +57,8 @@ func main() {
 		fmt.Println("Oh no!", err)
 		os.Exit(1)
 	}
-
+	//#endregion
+	//#region progress
 	m := model{
 		progress: progress.New(progress.WithGradient(GetRandomColorInHex(), GetRandomColorInHex())),
 	}
@@ -58,4 +67,5 @@ func main() {
 		fmt.Println("Oh no!", err)
 		os.Exit(1)
 	}
+	//#endregion
 }
