@@ -1,0 +1,14 @@
+{
+    "packages": [
+        {
+            "jazzmine": {
+                "name": "jazzmine",
+                "desc": "A package manager for general use"
+            },
+            "nodejs": {
+                "name": "nodejs",
+                "desc": "A platform built on Chrome's JavaScript runtime for easily building fast, scalable network applications"
+            }
+        }
+    ]
+}
