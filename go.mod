@@ -1,4 +1,4 @@
-module bpkg
+module nupkg
 
 go 1.18
 
