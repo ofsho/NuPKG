@@ -9,24 +9,49 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 	"os"
-	"time"
 
+	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/progress"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
 func main() {
-	m := model{
-		progress: progress.New(progress.WithGradient(GetRandomColorInHex(), GetRandomColorInHex())),
+	var (
+		helpStyle = list.DefaultStyles().HelpStyle.PaddingLeft(4).PaddingBottom(1)
+	)
+
+	items := []list.Item{
+		item("Jazzmine"),
+		item("NodeJS"),
+		item("Raylib"),
+		item("Plib"),
+		item("Pango"),
+		item("Unity3D"),
+		item("U36"),
+		item("U36 F#"),
+		item("Castrime"),
 	}
 
-	rand.Seed(time.Now().UTC().UnixNano())
+	const defaultWidth = 20
 
-	if err := tea.NewProgram(newModel()).Start(); err != nil {
-		fmt.Println("Error running program:", err)
+	l := list.New(items, itemDelegate{}, defaultWidth, listHeight)
+	l.Title = "Pick a package"
+	l.SetShowStatusBar(false)
+	l.SetFilteringEnabled(false)
+	l.Styles.Title = titleStyle
+	l.Styles.PaginationStyle = paginationStyle
+	l.Styles.HelpStyle = helpStyle
+
+	m2 := model_2{list: l}
+
+	if err := tea.NewProgram(m2).Start(); err != nil {
+		fmt.Println("Oh no!", err)
 		os.Exit(1)
+	}
+
+	m := model{
+		progress: progress.New(progress.WithGradient(GetRandomColorInHex(), GetRandomColorInHex())),
 	}
 
 	if err := tea.NewProgram(m).Start(); err != nil {
